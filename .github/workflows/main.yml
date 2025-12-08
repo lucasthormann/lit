@@ -18,7 +18,7 @@ jobs:
         run:
           docker login -u $username -p $password
       - name: Build the image
-        run: make buildi
+        run: make build
       - name: Tag Image
         run: docker tag lit:latest lucasthormann/lit:latest
       - name: Push image to Docker Hub
