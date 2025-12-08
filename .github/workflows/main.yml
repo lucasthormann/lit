@@ -18,3 +18,5 @@ jobs:
      #     password: ${{secrets.DOCKER_PASSWORD}}
       - name: Build the image
         run: make build
+      - name: Push image to Docker Hub
+        run: docker push lit:latest
