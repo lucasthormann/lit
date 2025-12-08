@@ -19,4 +19,4 @@ jobs:
       - name: Build the image
         run: make build
       - name: Push image to Docker Hub
-        run: docker push ${{secrets.DOCKER_USERNAME}}/lit:latest
+        run: docker push docker.io/library/lit:latest
