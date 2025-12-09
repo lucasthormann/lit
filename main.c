@@ -13,7 +13,8 @@ enum token_kind {
   THEN,
   EQUAL,
   PLUS,
-  LESS_THAN
+  LESS_THAN,
+  INVALID
 };
 
 const char *show_token(enum token_kind kind) {
@@ -40,8 +41,18 @@ const char *show_token(enum token_kind kind) {
     return "plus";
    case LESS_THAN:
     return "less_than";
+   case INVALID:
+    return "invalid";
    }
 }
+
+struct lexer { // lexer data structure
+  char *buffer; //buffer that we are going to read
+  unsigned int buffer_len; // buffer length
+  unsigned int pos; // position
+  unsigned int read_pos; // read position
+  char ch; // current character
+};
 
 int main() {
   char *buffer = NULL;
