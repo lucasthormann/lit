@@ -54,6 +54,14 @@ struct lexer { // lexer data structure
   char ch; // current character
 };
 
+static char lexer_peek_char(struct lexer *l) { // advances the buffer
+  if (l->read_pos >= l->buffer_len) {
+    return EOF;
+  }
+
+  return l->buffer[l->read_pos];
+}
+
 int main() {
   char *buffer = NULL;
   ds_io_read_file(NULL, &buffer);
