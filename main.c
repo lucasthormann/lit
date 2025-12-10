@@ -54,13 +54,21 @@ struct lexer { // lexer data structure
   char ch; // current character
 };
 
-static char lexer_peek_char(struct lexer *l) { // advances the buffer
-  if (l->read_pos >= l->buffer_len) {
+static char lexer_peek_char(struct lexer *l) { // peeks at top element in 
+  if (l->read_pos >= l->buffer_len) {           // the buffer
     return EOF;
   }
 
   return l->buffer[l->read_pos];
 }
+
+static char lexer_read_char(struct lexer *l) { // advances the buffer
+  l->ch = lexer_peek_char(l);
+  l->pos = l->read_pos;
+  l-> read_pos += 1;
+
+  return l->ch;
+} 
 
 int main() {
   char *buffer = NULL;
