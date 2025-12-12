@@ -1,6 +1,8 @@
 #include <stdio.h>
-#define OS_IO_IMPLEMENTATION
+#define DS_IMPLEMENTATION
 #include "ds.h"
+#include <string.h>
+#include <ctype.h>
 
 enum token_kind {
   IDENT,
@@ -68,7 +70,23 @@ static char lexer_read_char(struct lexer *l) { // advances the buffer
   l-> read_pos += 1;
 
   return l->ch;
-} 
+}
+
+static void skip_whitespaces(struct lexer *l) { // skips white spaces in input
+  while (isspace(l->ch)) {
+    lexer_read_char(l);
+  }
+}
+
+static void lexer_init(struct lexer *l, char *buffer, unsigned int buffer_len) { // initiaize lexer (iterator) with a buffer
+  l->buffer = buffer;
+  l->buffer_len = buffer_len;
+  l->pos = 0;
+  l->read_pos = 0;
+  l->ch = 0;
+
+  lexer_read_char(l);
+}
 
 int main() {
   char *buffer = NULL;
