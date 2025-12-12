@@ -4,6 +4,11 @@
 #include <string.h>
 #include <ctype.h>
 
+struct token {
+  enum token_kind kind;
+  char *value;
+}
+
 enum token_kind {
   IDENT,
   LABEL,
@@ -16,7 +21,8 @@ enum token_kind {
   EQUAL,
   PLUS,
   LESS_THAN,
-  INVALID
+  INVALID,
+  END
 };
 
 const char *show_token(enum token_kind kind) {
@@ -45,6 +51,8 @@ const char *show_token(enum token_kind kind) {
     return "less_than";
    case INVALID:
     return "invalid";
+   case END:
+    return "end";
    }
 }
 
@@ -86,6 +94,43 @@ static void lexer_init(struct lexer *l, char *buffer, unsigned int buffer_len) {
   l->ch = 0;
 
   lexer_read_char(l);
+}
+
+static struct token lexer_next_token(struct lexer *l) { 
+  skip_whitespaces(l);
+
+  if (l->ch = EOF){
+    lexer_read_char(l);
+    return (struct token){.kind = END, .value = NULL};
+  }
+  else if (l->ch == '=') {
+    lexer_read_char(l);
+    return (struct token){.kind = EQUAL, .value = NULL};
+  } 
+  else if (l->ch == '+') {
+    lexer_read_char(l);
+    return (struct token){.kind = PLUS, .value = NULL};
+  }
+  else if (l->ch == '<') {
+    lexer_read_char(l);
+    return (struct token){.kind = LESS_THAN, .value = NULL};
+  }
+  else if (l->ch == ':') {
+    // read until end
+  }
+  else if (isdigit(l->ch)) {
+    // read until end
+  }
+  else if (isalnum(l->ch) || l->ch = '_') {
+    // starts with letter or _
+  }
+  else {
+    ds_string_slice slice = {.str = l->buffer + l->pos, .len = 1};
+    char *value = NULL;
+    ds_string_slice_to_owned(&slice, &value);
+    lexer_read_char(l);
+    return (struct token){.kind = INVALID, .value = value};
+  }
 }
 
 int main() {
