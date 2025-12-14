@@ -170,6 +170,21 @@ static struct token lexer_next_token(struct lexer *l) {
   }
 }
 
+int lexer_tokenize(char *buffer, unsigned int length, ds_dynamic_array *tokens) {
+  struct lexer lexer;
+  lexer_init(&lexer, (char *)buffer, length);
+
+  struct token tok;
+  do {
+    tok = lexer_next_toke(&lexer);
+    if (ds_dynamic_array_append(tokens, &tok) != 0) {
+      DS_PANIC("Failed to append token to array");
+    }
+  } while (tok.kind != END);
+
+  return 0;
+}
+
 int main() {
   char *buffer = NULL;
   ds_io_read_file(NULL, &buffer);
