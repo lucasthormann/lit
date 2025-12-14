@@ -108,7 +108,7 @@ static void lexer_init(struct lexer *l, char *buffer, unsigned int buffer_len) {
 static struct token lexer_next_token(struct lexer *l) { 
   skip_whitespaces(l);
 
-  if (l->ch = EOF){
+  if (l->ch == EOF){
     lexer_read_char(l);
     return (struct token){.kind = END, .value = NULL};
   }
