@@ -117,12 +117,49 @@ static struct token lexer_next_token(struct lexer *l) {
   }
   else if (l->ch == ':') {
     // read until end
+    lexer_read_char(l); // next in buffer
+    ds_string_slice slice = {.str = l->buffer + l->pos, .len = 0};
+    while (isalnum(l->ch) || l->ch == '_') {
+      slice.len += 1;
+      lexer_read_char(l);
+    }
+    char *value = NULL;
+    ds_string_slice_to_owned(&slice, &value);
+    return (struct token){.kind = LABEL, .value = value};
   }
   else if (isdigit(l->ch)) {
     // read until end
+    ds_string_slice slice = {.str = l-buffer + l->pos, .len = 0};
+    while (isdigit(l->ch)) {
+      slice.len += 1;
+      lexer_read_char(l);
+    }
+    char *value = NULL;
+    ds_string_slice_to_owned(&slice, &value);
+    return (struct token){.kind = INT, .value = value};
   }
   else if (isalnum(l->ch) || l->ch = '_') {
     // starts with letter or _
+    ds_string_slice slice = {.str = l->buffer + l->pos, .len = 0};
+    while (isalnum(l->ch) || l->ch == '_') {
+      slice.len += 1;
+      lexer_read_char(l);
+    }
+    char *value = NULL;
+    ds_string_slice_to_owned(&slice, &value);
+    if (strcmp(value, "input") == 0) {
+      return (struct token){.kind = INPUT, .value = NULL};
+    } else if (strcmp(value, "output") == 0) {
+      return (struct token){.kind = OUTPUT, .value = NULL}; 
+    } else if (strcmp(value, "goto") == 0) {
+      return (struct token){.kind = GOTO, .value = NULL};
+    } else if (strcmp(value, "if") == 0) {
+      return (struct token){.kind = IF, .value = NULL};
+    } else if (strcmp(value, "then") == 0) {
+      return (struct token){.kind = THEN, .value = NULL};
+    } else {
+      return (struct token){.kind = IDNET, .value = value};
+    }
   }
   else {
     ds_string_slice slice = {.str = l->buffer + l->pos, .len = 1};
