@@ -4,11 +4,6 @@
 #include <string.h>
 #include <ctype.h>
 
-struct token {
-  enum token_kind kind;
-  char *value;
-}
-
 enum token_kind {
   IDENT,
   LABEL,
@@ -25,7 +20,12 @@ enum token_kind {
   END
 };
 
-const char *show_token(enum token_kind kind) {
+struct token {
+  enum token_kind kind;
+  char *value;
+};
+
+const char *show_token_kind(enum token_kind kind) {
   switch (kind) {
   case IDENT:
     return "ident";
@@ -54,6 +54,15 @@ const char *show_token(enum token_kind kind) {
    case END:
     return "end";
    }
+}
+
+void print_token(struct token tok) {
+  const char *kind = show_token_kind(tok.kind);
+  printf("%s", kind);
+  if (tok.value != NULL) {
+    printf("(%s)", tok.value);
+  }
+  printf("\n");
 }
 
 struct lexer { // lexer data structure
@@ -129,7 +138,7 @@ static struct token lexer_next_token(struct lexer *l) {
   }
   else if (isdigit(l->ch)) {
     // read until end
-    ds_string_slice slice = {.str = l-buffer + l->pos, .len = 0};
+    ds_string_slice slice = {.str = l->buffer + l->pos, .len = 0};
     while (isdigit(l->ch)) {
       slice.len += 1;
       lexer_read_char(l);
@@ -138,7 +147,7 @@ static struct token lexer_next_token(struct lexer *l) {
     ds_string_slice_to_owned(&slice, &value);
     return (struct token){.kind = INT, .value = value};
   }
-  else if (isalnum(l->ch) || l->ch = '_') {
+  else if (isalnum(l->ch) || l->ch == '_') {
     // starts with letter or _
     ds_string_slice slice = {.str = l->buffer + l->pos, .len = 0};
     while (isalnum(l->ch) || l->ch == '_') {
@@ -158,7 +167,7 @@ static struct token lexer_next_token(struct lexer *l) {
     } else if (strcmp(value, "then") == 0) {
       return (struct token){.kind = THEN, .value = NULL};
     } else {
-      return (struct token){.kind = IDNET, .value = value};
+      return (struct token){.kind = IDENT, .value = value};
     }
   }
   else {
@@ -176,7 +185,7 @@ int lexer_tokenize(char *buffer, unsigned int length, ds_dynamic_array *tokens) 
 
   struct token tok;
   do {
-    tok = lexer_next_toke(&lexer);
+    tok = lexer_next_token(&lexer);
     if (ds_dynamic_array_append(tokens, &tok) != 0) {
       DS_PANIC("Failed to append token to array");
     }
@@ -187,7 +196,17 @@ int lexer_tokenize(char *buffer, unsigned int length, ds_dynamic_array *tokens) 
 
 int main() {
   char *buffer = NULL;
-  ds_io_read_file(NULL, &buffer);
+  int length = ds_io_read_file(NULL, &buffer);
+
+  ds_dynamic_array tokens;
+  ds_dynamic_array_init(&tokens, sizeof(struct token));
+
+  lexer_tokenize(buffer, length, &tokens);
+  for (unsigned int i = 0; i < tokens.count; i++) {
+    struct token tok;
+    ds_dynamic_array_get(&tokens, i, &tok);
+    print_token(tok);
+  }
 
   printf("%s\n", buffer);
 }
