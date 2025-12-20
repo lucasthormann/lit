@@ -207,6 +207,4 @@ int main() {
     ds_dynamic_array_get(&tokens, i, &tok);
     print_token(tok);
   }
-
-  printf("%s\n", buffer);
 }
