@@ -194,6 +194,26 @@ int lexer_tokenize(char *buffer, unsigned int length, ds_dynamic_array *tokens) 
   return 0;
 }
 
+// ---------------- Parser --------------------------
+enum instr_kind {
+  INSTR_ASSIGN,
+  INSTR_IF,
+  INSTR_GOTO,
+  INSTR_OUTPUT,
+  INSTR_LABEL
+};
+
+struct instr_node {
+  enum instr_kind kind;
+  union {
+
+  };
+};
+
+struct program_node {
+  ds_dynamic_array instrs;
+};
+
 int main() {
   char *buffer = NULL;
   int length = ds_io_read_file(NULL, &buffer);
