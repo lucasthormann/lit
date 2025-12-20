@@ -1,13 +1,14 @@
 # The beginning of a Turing complete programming language called lit 
 
 # Dependencies:
+* Make
 * Docker
 
 # Running The Code:
 ```
-docker pull lucasthormann/lit:latest
-docker run -it lucasthormann/lit
-cd src
+git clone https://github.com/lucasthormann/lit.git
+make build
+make run
 gcc -g main.c -o main
 cat example.lit | ./main
 ```
