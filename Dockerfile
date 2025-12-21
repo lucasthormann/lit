@@ -16,5 +16,3 @@ RUN cp fasm/fasm.x64 /usr/local/bin/fasm
 RUN echo 'set rnu' > .vimrc
 
 COPY ds.h example.lit main.c ./src/
-
-CMD [ "bash" ] 
