@@ -4,4 +4,4 @@ build: Dockerfile
 
 .PHONY: run
 run:
-	docker run --rm --interactive --tty lit:latest
+	docker run -it lit:latest
