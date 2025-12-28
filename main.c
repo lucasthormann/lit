@@ -195,6 +195,23 @@ int lexer_tokenize(char *buffer, unsigned int length, ds_dynamic_array *tokens) 
 }
 
 // ---------------- Parser --------------------------
+
+enum expr_kind {
+  EXPR_PLUS,
+};
+
+strucyt expr_binary_node {
+  struct term_node lhs;
+  struct term_node rhs;
+};
+
+struct expr_node {
+  enum expr_kind kind;
+  union {
+    expr_binary_node add;
+  }
+};
+
 enum instr_kind {
   INSTR_ASSIGN,
   INSTR_IF,
@@ -203,10 +220,36 @@ enum instr_kind {
   INSTR_LABEL
 };
 
+struct assign_node {
+  char *ident;
+  struct expr_node expr;
+};
+
+struct if_node {
+  struct rel_node rel;
+  struct instr_node *instr;
+};
+
+struct goto_node {
+  char *label;
+};
+
+struct output_node {
+  struct term_node term;
+};
+
+struct label_node {
+  char *label;
+};
+
 struct instr_node {
   enum instr_kind kind;
   union {
-
+    struct assign_node assign;
+    struct if_node if_;
+    sturct goto_node goto_;
+    struct output_node output;
+    struct label_node label;
   };
 };
 
