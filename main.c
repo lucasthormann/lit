@@ -196,7 +196,22 @@ int lexer_tokenize(char *buffer, unsigned int length, ds_dynamic_array *tokens) 
 
 // ---------------- Parser --------------------------
 
+enum term_kind {
+  TERM_INPUT,
+  TERM_INT,
+  TERM_IDENT
+};
+
+struct term_node {
+  enum term_kind kind;
+  union {
+    char *value;
+  };
+};
+
+
 enum expr_kind {
+  EXPR_TERM,
   EXPR_PLUS,
 };
 
@@ -208,8 +223,20 @@ strucyt expr_binary_node {
 struct expr_node {
   enum expr_kind kind;
   union {
-    expr_binary_node add;
+    struct term_node term;
+    struct expr_binary_node add;
   }
+};
+
+enum rel_kind {
+  REL_LESS_THAN,
+};
+
+sturct rel_node {
+  enum rel_kind kind;
+  union {
+    struct term_binary_node less_than;
+  };
 };
 
 enum instr_kind {
@@ -256,6 +283,92 @@ struct instr_node {
 struct program_node {
   ds_dynamic_array instrs;
 };
+
+struct parser {
+  ds_dynamic_array tokens;
+  unsigned int index;
+};
+
+void parser_init(ds_dynamic_array tokens, struct parser *p) {
+  p->tokens = tokens;
+  p->index = 0;
+}
+
+void parser_current(struct parser *p, struct token *token) {
+  ds_dynamic_array_get(&p->tokens, p->index, token);
+}
+
+void parser_advance(struct parser *p) {
+  p->index++;
+}
+
+void parse_expr(struct parser *p, struct expr_node *expr) {
+  struct token token;
+  struct term_node lhs, rhs;
+
+  parser_term(p, &lhs);
+
+  parser_current(p, &token);
+  if(token.kind == PLUS) {
+    parser_advance(p);
+    parse_term(p, &rhs;
+
+    expr->add.lhs = lhs;
+    expr->add.rhs = rhs;
+  }
+  else {
+    expr->term = lhs;
+  }
+}
+
+void parse_assign(struct parser *p, struct instr_node *instr) {
+  struct token token;
+  parser_current(p, &token);
+  instr->assign.ident = token.value;
+  parser_advance(p);
+
+  parser_current(p, &token);
+  if(token.kind != EQUAL) {
+    DS_PANIC("Expected equal found %s", show_token_kind(token.kind));
+  }
+  parser_advance(p);
+
+  parse_expr(p, &instr->assign.expr);
+}
+
+void parse_program(struct parser *p, struct program_node *program) {
+  ds_dynamic_array_init(&program->instrs, sizeof(struct instr_node));
+
+  struct token token;
+  do {
+    struct instr_node instr;
+
+    parser_current(p, &token);
+    if(token.kind == IDENT) {
+      parse_assign(p, &instr);
+    }
+    else if(token.kind == IF) {
+      parse_if(p, &instr);
+    }
+    else if(token.kind == GOTO) {
+      parse_goto(p, &instr);
+    }
+    else if(token.kind == OUTPUT) {
+      parse_output(p, &instr);
+    }
+    else if(token.kind == LABEL) {
+      parse_label(p, &instr);
+    } 
+    else {
+      DS_PANIC("unexpected toke %s", show_token_kind(token.kind));
+    }
+    parser_advance(p);
+
+    ds_dynamic_array_append(&program->instrs, &instr);
+
+    parser_current(p, &token);
+  } while(token.kind != END);
+}
 
 int main() {
   char *buffer = NULL;
