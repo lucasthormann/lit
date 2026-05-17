@@ -1,16 +1,47 @@
-# The beginning of a Turing complete programming language called lit 
+# lit Compiler
+* The beginning of a Turing complete programming language I've dubbed lit.
 
-# Dependencies:
-* Make
-* Docker
+## Development Environment:
+* Lenovo T14 Gen 6 (x86_64)
+* Ubuntu 24.04.3
+* GNOME Terminal 3.52.0
+* Vi IMproved 9.1
 
-# Running The Code:
+## Dependencies:
+* Git 2.43.0 or newer
+* Docker 28.2.2 or newer
+* GNU Make 4.3 or newer
+
+# How to Build and Run the compiler:
+
+1. Clone the repo
 ```
 git clone https://github.com/lucasthormann/lit.git
+```
+
+2. Run the following command in order to build the container image:
+```
 make build
+```
+
+3. Run the following command in order to run the image inside of a container:
+```
 make run
+```
+
+4. Change to source directory:
+```
+cd src
+```
+
+5. Run the following command in order to build (i.e. preprocess, compile, assemble, and link) the compiler:
+```
 gcc -g main.c -o main
+```
+
+6. Run the following command in order to test the compiler:
+```
 cat example.lit | ./main
 ```
 
-* This step is only a demonstartion of the tokenizer/lexer.
+* This is only a demonstartion of the tokenizer/scanner because I've yet to implement the rest of the functionality.
