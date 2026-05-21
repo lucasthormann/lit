@@ -215,7 +215,7 @@ enum expr_kind {
   EXPR_PLUS,
 };
 
-strucyt expr_binary_node {
+struct expr_binary_node {
   struct term_node lhs;
   struct term_node rhs;
 };
@@ -232,10 +232,10 @@ enum rel_kind {
   REL_LESS_THAN,
 };
 
-sturct rel_node {
+struct rel_node {
   enum rel_kind kind;
   union {
-    struct term_binary_node less_than;
+    struct expr_binary_node less_than;
   };
 };
 
@@ -274,7 +274,7 @@ struct instr_node {
   union {
     struct assign_node assign;
     struct if_node if_;
-    sturct goto_node goto_;
+    struct goto_node goto_;
     struct output_node output;
     struct label_node label;
   };
@@ -302,16 +302,16 @@ void parser_advance(struct parser *p) {
   p->index++;
 }
 
-void parse_expr(struct parser *p, struct expr_node *expr) {
+/* void parse_expr(struct parser *p, struct expr_node *expr) {
   struct token token;
   struct term_node lhs, rhs;
 
-  parser_term(p, &lhs);
+  parse_term(p, &lhs);
 
   parser_current(p, &token);
   if(token.kind == PLUS) {
     parser_advance(p);
-    parse_term(p, &rhs;
+    parse_term(p, &rhs);
 
     expr->add.lhs = lhs;
     expr->add.rhs = rhs;
@@ -319,9 +319,9 @@ void parse_expr(struct parser *p, struct expr_node *expr) {
   else {
     expr->term = lhs;
   }
-}
+} */
 
-void parse_assign(struct parser *p, struct instr_node *instr) {
+/* void parse_assign(struct parser *p, struct instr_node *instr) {
   struct token token;
   parser_current(p, &token);
   instr->assign.ident = token.value;
@@ -334,9 +334,9 @@ void parse_assign(struct parser *p, struct instr_node *instr) {
   parser_advance(p);
 
   parse_expr(p, &instr->assign.expr);
-}
+} */
 
-void parse_program(struct parser *p, struct program_node *program) {
+/* void parse_program(struct parser *p, struct program_node *program) {
   ds_dynamic_array_init(&program->instrs, sizeof(struct instr_node));
 
   struct token token;
@@ -360,7 +360,7 @@ void parse_program(struct parser *p, struct program_node *program) {
       parse_label(p, &instr);
     } 
     else {
-      DS_PANIC("unexpected toke %s", show_token_kind(token.kind));
+      DS_PANIC("unexpected token %s", show_token_kind(token.kind));
     }
     parser_advance(p);
 
@@ -368,7 +368,7 @@ void parse_program(struct parser *p, struct program_node *program) {
 
     parser_current(p, &token);
   } while(token.kind != END);
-}
+} */
 
 int main() {
   char *buffer = NULL;
