@@ -1,4 +1,4 @@
-# lit Compiler
+# lit
 * The beginning of a Turing complete programming language I've dubbed lit.
 
 ## Development Environment:
