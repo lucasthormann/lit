@@ -12,6 +12,9 @@
 * Docker 28.2.2 or newer
 * GNU Make 4.3 or newer
 
+## Target Environment:
+* Ubuntu 26.04 (x86_64)
+
 # How to Build and Run the compiler:
 
 1. Clone the repo
