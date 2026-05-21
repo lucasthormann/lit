@@ -42,7 +42,7 @@ cd src
 gcc -g main.c -o main
 ```
 
-6. Run the following command in order to test the compiler:
+6. Run the following command in order to use the scanner:
 ```
 cat example.lit | ./main
 ```
