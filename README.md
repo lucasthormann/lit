@@ -3,17 +3,17 @@
 
 ## Development Environment:
 * Lenovo T14 Gen 6 (x86_64)
-* Ubuntu 24.04.3
-* GNOME Terminal 3.52.0
-* Vi IMproved 9.1
+* Ubuntu (24.04.3)
+* GNOME Terminal (3.52.0)
+* Vi IMproved (9.1)
 
 ## Dependencies:
-* Git 2.43.0 or newer
-* Docker 28.2.2 or newer
-* GNU Make 4.3 or newer
+* Git (2.43.0 or newer)
+* Docker (28.2.2 or newer)
+* GNU Make (4.3 or newer)
 
 ## Target Environment:
-* Ubuntu 26.04 (x86_64)
+* A modern PC (x86_64) running an Ubuntu (24.04.3) instance
 
 # How to Build and Run the compiler:
 
@@ -22,12 +22,12 @@
 git clone https://github.com/lucasthormann/lit.git
 ```
 
-2. Run the following command in order to build the container image:
+2. Build the container image:
 ```
 make build
 ```
 
-3. Run the following command in order to run the image inside of a container:
+3. Run the image inside of a container:
 ```
 make run
 ```
@@ -37,14 +37,14 @@ make run
 cd src
 ```
 
-5. Run the following command in order to build (i.e. preprocess, compile, assemble, and link) the compiler:
+5. Build (i.e., preprocess, compile, assemble, and link) the compiler:
 ```
 gcc -g main.c -o main
 ```
 
-6. Run the following command in order to use the scanner:
+6. Run the scanner:
 ```
 cat example.lit | ./main
 ```
 
-* This is only a demonstartion of the tokenizer/scanner because I've yet to implement the rest of the functionality.
+* This is only a demonstration of the tokenizer/scanner because I've yet to implement the rest of the functionality.
