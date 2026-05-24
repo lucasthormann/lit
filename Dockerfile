@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 WORKDIR /root
 
-#install basic utilities
+#Install basic utilities
 RUN apt-get update -y
 RUN apt-get upgrade -y
 RUN apt-get install -y file grep make tar unzip tree vim wget gcc
