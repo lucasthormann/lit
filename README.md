@@ -15,6 +15,9 @@
 ## Target Environment:
 * A modern PC (x86_64) running an Ubuntu (24.04.3) instance
 
+## Container Image:
+* https://hub.docker.com/r/lucasthormann/lit
+
 # How to Build and Run the compiler:
 
 1. Clone the repo
